@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+/* Design tokens. Components use these through Tailwind utilities
+   (bg-canvas, text-fg, ...) rather than raw colors. */
+@theme {
+  --color-*: initial;
+  --color-canvas: #faf8f5;
+  --color-surface: #ffffff;
+  --color-fg: #1c1a17;
+  --color-fg-muted: #6b655c;
+  --color-line: #e6e1d9;
+  --color-accent: #b4532a;
+
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-serif: ui-serif, Georgia, "Times New Roman", serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-canvas: #151311;
+    --color-surface: #1e1b18;
+    --color-fg: #f1ede6;
+    --color-fg-muted: #a39c91;
+    --color-line: #34302b;
+    --color-accent: #e08a5f;
+  }
+}
+
+html {
+  color-scheme: light dark;
+}

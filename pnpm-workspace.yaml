@@ -1,0 +1,14 @@
+packages:
+  - apps/*
+  - packages/*
+
+# Packages allowed to run install scripts (they download platform binaries).
+allowBuilds:
+  esbuild: true
+  workerd: true
+
+# eslint-plugin-jsx-a11y works with ESLint 10 but its declared peer range has
+# not been updated yet.
+peerDependencyRules:
+  allowedVersions:
+    eslint-plugin-jsx-a11y>eslint: "10"

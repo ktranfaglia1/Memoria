@@ -1,0 +1,7 @@
+# Local-only secrets for `pnpm dev`. Copy to .dev.vars (git-ignored) and fill in.
+# Production values are set with: pnpm exec wrangler secret put <NAME>
+#
+# Added in Phase 1:
+# GOOGLE_CLIENT_ID=
+# GOOGLE_CLIENT_SECRET=
+# AUTH_SECRET=

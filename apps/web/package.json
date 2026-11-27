@@ -1,0 +1,32 @@
+{
+  "name": "@memoria/web",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler types && astro dev",
+    "build": "astro build",
+    "preview": "astro build && wrangler dev",
+    "check": "wrangler types && astro check",
+    "deploy": "astro build && wrangler deploy",
+    "cf-typegen": "wrangler types"
+  },
+  "dependencies": {
+    "@astrojs/cloudflare": "^14.4.9",
+    "@astrojs/react": "^7.1.9",
+    "@memoria/shared": "workspace:*",
+    "@tailwindcss/vite": "^4.3.5",
+    "astro": "^7.4.13",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "tailwindcss": "^4.3.5"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.12",
+    "@types/node": "^26.6.11",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "typescript": "~6.0.3",
+    "wrangler": "4.168.0"
+  }
+}

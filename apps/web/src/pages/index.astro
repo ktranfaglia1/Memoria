@@ -1,0 +1,16 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+// The landing page has no per-request data yet, so build it once.
+export const prerender = true;
+---
+
+<BaseLayout>
+  <main class="mx-auto flex min-h-dvh max-w-xl flex-col justify-center px-6">
+    <p class="text-fg-muted text-sm tracking-widest uppercase">Coming soon</p>
+    <h1 class="mt-3 font-serif text-5xl">Memoria</h1>
+    <p class="text-fg-muted mt-4 text-lg">
+      A private photo library for our family.
+    </p>
+  </main>
+</BaseLayout>

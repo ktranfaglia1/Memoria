@@ -1,0 +1,38 @@
+// Cloudflare Workers config for the Memoria web app and API.
+// IDs in this file are not secrets: using them still requires an API token.
+// Secrets go in `wrangler secret put <NAME>` (production) or .dev.vars (local).
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "memoria",
+  "main": "@astrojs/cloudflare/entrypoints/server",
+  "compatibility_date": "2026-11-18",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+  },
+  "observability": {
+    "enabled": true,
+  },
+  "routes": [
+    {
+      "pattern": "memoria.kyletranfaglia.top",
+      "custom_domain": true,
+    },
+  ],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "memoria",
+      // Replace with the id printed by `wrangler d1 create memoria`.
+      "database_id": "00000000-0000-0000-0000-000000000000",
+      "migrations_dir": "migrations",
+    },
+  ],
+  "r2_buckets": [
+    {
+      "binding": "BUCKET",
+      "bucket_name": "memoria",
+    },
+  ],
+}

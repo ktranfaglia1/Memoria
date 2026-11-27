@@ -1,0 +1,33 @@
+# dependencies
+node_modules/
+
+# build output
+dist/
+.astro/
+.wrangler/
+
+# secrets and local config: never commit these.
+# Only the *.example files belong in git.
+.env
+.env.*
+!.env.example
+.dev.vars
+.dev.vars.*
+!.dev.vars.example
+apps/agent/config.json
+apps/agent/config.*.json
+!apps/agent/config.example.json
+
+# logs
+*.log
+
+# test output
+test-results/
+playwright-report/
+coverage/
+
+# editor and OS files
+.DS_Store
+.idea/
+*:Zone.Identifier
+worker-configuration.d.ts
