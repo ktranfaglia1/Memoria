@@ -1,0 +1,56 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+if (Astro.locals.user) return Astro.redirect("/");
+
+// Better Auth sends people back here with ?error=<code> when sign-in fails.
+const error = Astro.url.searchParams.get("error");
+const message =
+  error === "not_allowed"
+    ? "That Google account doesn't have access to Memoria."
+    : error
+      ? "Sign-in didn't work. Please try again."
+      : null;
+---
+
+<BaseLayout title="Sign in · Memoria">
+  <main class="mx-auto flex min-h-dvh max-w-sm flex-col justify-center px-4">
+    <h1 class="font-serif text-4xl">Memoria</h1>
+    <p class="text-fg-muted mt-2">A private photo library for our family.</p>
+
+    {message && (
+      <p
+        role="alert"
+        class="border-line bg-surface mt-6 rounded-lg border p-3 text-sm"
+      >
+        {message}
+      </p>
+    )}
+
+    <button
+      type="button"
+      data-google
+      class="border-line bg-surface mt-8 rounded-xl border px-5 py-4 text-lg font-semibold disabled:opacity-60"
+    >
+      Continue with Google
+    </button>
+  </main>
+</BaseLayout>
+
+<script>
+  import { authClient } from "../lib/client/auth.ts";
+
+  const button = document.querySelector<HTMLButtonElement>("[data-google]");
+  button?.addEventListener("click", async () => {
+    button.disabled = true;
+    const { error } = await authClient.signIn.social({
+      provider: "google",
+      callbackURL: "/",
+      errorCallbackURL: "/sign-in",
+    });
+    if (error) {
+      button.disabled = false;
+      window.location.search = "?error=start_failed";
+    }
+  });
+</script>

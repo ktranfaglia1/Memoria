@@ -1,0 +1,6 @@
+{
+  "apiUrl": "https://memoria.kyletranfaglia.top",
+  "libraryDir": "D:\\Memoria",
+  "token": "from `pnpm --filter @memoria/agent token:new`",
+  "pollMinutes": 5
+}

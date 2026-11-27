@@ -2,21 +2,22 @@
 
 A private photo library for a small household. Phones upload photos to a cloud inbox that is always online, and a sync agent on a home PC pulls the originals onto a local drive whenever the PC is on. Nobody needs to know whether the PC is awake.
 
-> **Status:** Phase 0 (foundations). Sign-in, uploads and the sync agent arrive in Phase 1.
+> **Status:** Phase 1 (upload pipeline): Google sign-in, uploads, and the sync agent. The gallery, albums and backups arrive in Phase 2.
 
 ## How it works
 
 ```
 iPhone (installable web app)
-   │ 1. ask the API for an upload link
+   │ 1. send each photo's SHA-256; duplicates are skipped
+   │ 2. send the photo; R2 rejects it if the hash doesn't match
    ▼
-API on Cloudflare Workers ─── D1 database (users, albums, photo status)
-   │ 2. upload the photo straight to storage
+API on Cloudflare Workers ─── D1 database (users, allowlist, photo status)
+   │
    ▼
 R2 bucket (inbox for originals + permanent thumbnails)
    ▲
    │ 3. sync agent on the home PC, when it is on:
-   │    download → save to disk → verify SHA-256 → mark archived
+   │    download → verify SHA-256 → save to disk → verify again → mark saved
 Home PC library drive (permanent originals) → weekly encrypted backup
 ```
 
@@ -44,7 +45,8 @@ Requires Node 26 (`nvm use`) and pnpm 12.
 ```bash
 pnpm install
 cd apps/web
-pnpm exec wrangler d1 migrations apply memoria --local   # first time only
+cp .dev.vars.example .dev.vars                           # then fill it in
+pnpm exec wrangler d1 migrations apply memoria --local   # after every new migration
 pnpm dev                                                 # http://localhost:4321
 ```
 
@@ -72,6 +74,24 @@ pnpm exec wrangler d1 migrations apply memoria --remote
 pnpm run deploy                            # first deploy also attaches the custom domain
 ```
 
+Set the production secrets (each command prompts for the value):
+
+```bash
+pnpm exec wrangler secret put BETTER_AUTH_SECRET     # random: openssl rand -base64 32
+pnpm exec wrangler secret put GOOGLE_CLIENT_ID
+pnpm exec wrangler secret put GOOGLE_CLIENT_SECRET
+```
+
+The Google OAuth client is a "Web application" client in Google Cloud Console with these redirect URIs: `https://memoria.kyletranfaglia.top/api/auth/callback/google` and `http://localhost:4321/api/auth/callback/google`.
+
+Allow a Google account to sign in (addresses live only in D1, never in this repo):
+
+```bash
+pnpm exec wrangler d1 execute memoria --remote --command "INSERT INTO allowed_emails (email, role) VALUES ('someone@gmail.com', 'admin')"
+```
+
+The home PC agent has its own setup steps: [apps/agent/README.md](apps/agent/README.md).
+
 Then, in the GitHub repo settings, create an environment named `production` with two secrets:
 
 - `CLOUDFLARE_ACCOUNT_ID`: shown on the Workers & Pages overview page.
@@ -79,6 +99,8 @@ Then, in the GitHub repo settings, create an environment named `production` with
 
 ## Security
 
+- Only allowlisted Google accounts can sign in. Every route except `/sign-in` and `/api/health` needs a session; the agent's routes need its token, and only the token's hash is stored.
+- Photos pass through the Worker into a private R2 bucket. There are no R2 access keys and no public bucket URLs.
 - No secrets live in this repository. Production secrets are Workers secrets (`wrangler secret put`); local ones go in `apps/web/.dev.vars` (git-ignored; see `.dev.vars.example`).
 - Deploy credentials exist only in the `production` GitHub environment, used only by pushes to `main`.
 - Third-party GitHub Actions are pinned to commit SHAs, and Dependabot proposes updates after a 7-day cooldown.

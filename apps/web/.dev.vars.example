@@ -1,7 +1,12 @@
-# Local-only secrets for `pnpm dev`. Copy to .dev.vars (git-ignored) and fill in.
+# Local-only settings for `pnpm dev`. Copy to .dev.vars (git-ignored) and fill in.
 # Production values are set with: pnpm exec wrangler secret put <NAME>
-#
-# Added in Phase 1:
-# GOOGLE_CLIENT_ID=
-# GOOGLE_CLIENT_SECRET=
-# AUTH_SECRET=
+
+BETTER_AUTH_URL=http://localhost:4321
+
+# Random 32+ byte string, e.g. the output of: openssl rand -base64 32
+BETTER_AUTH_SECRET=
+
+# Google Cloud Console → APIs & Services → Credentials → OAuth client (Web).
+# Authorized redirect URI: http://localhost:4321/api/auth/callback/google
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
