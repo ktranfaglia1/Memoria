@@ -24,8 +24,7 @@
     {
       "binding": "DB",
       "database_name": "memoria",
-      // Replace with the id printed by `wrangler d1 create memoria`.
-      "database_id": "00000000-0000-0000-0000-000000000000",
+      "database_id": "7f03e7e0-ffca-4c67-b296-e1c74f45ab83",
       "migrations_dir": "migrations",
     },
   ],
