@@ -1,0 +1,14 @@
+<button type="button" data-sign-out class="underline underline-offset-2">
+  Sign out
+</button>
+
+<script>
+  import { authClient } from "../lib/client/auth.ts";
+
+  document
+    .querySelector("[data-sign-out]")
+    ?.addEventListener("click", async () => {
+      await authClient.signOut();
+      window.location.href = "/sign-in";
+    });
+</script>

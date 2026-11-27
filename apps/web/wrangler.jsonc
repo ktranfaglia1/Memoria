@@ -11,6 +11,18 @@
     "directory": "./dist",
     "binding": "ASSETS",
   },
+  // Plain settings. .dev.vars overrides them locally.
+  "vars": {
+    "BETTER_AUTH_URL": "https://memoria.kyletranfaglia.top",
+  },
+  // Names only; values are set with `wrangler secret put` (see README).
+  "secrets": {
+    "required": [
+      "BETTER_AUTH_SECRET",
+      "GOOGLE_CLIENT_ID",
+      "GOOGLE_CLIENT_SECRET",
+    ],
+  },
   "observability": {
     "enabled": true,
   },
